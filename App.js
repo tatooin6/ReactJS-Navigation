@@ -4,7 +4,9 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-const HomeScreen = ({ navigation }) => {
+const Logo = () => <Text>Nombre Empresa</Text>
+
+  const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
@@ -19,14 +21,11 @@ const HomeScreen = ({ navigation }) => {
 }
 
 HomeScreen.navigationOptions = {
-  title:  'Pantalla Home',
-  headerStyle: { 
-    backgroundColor: '#ffeecc'
-  },
-  headerTintColor: '#222',
-  headerTitleStyle: {
-    fontWeight: 'bold',
-  }
+  // title:  'Pantalla Home',
+  headerTitle: <Logo />,
+  headerStyle: {
+      backgroundColor: '#cef'
+    },
 }
 
 const DetalleScreen = ({ navigation }) => {
@@ -47,15 +46,15 @@ const DetalleScreen = ({ navigation }) => {
   )
 }
 
-DetalleScreen.navigationOptions = ({ navigation }) => {
+// con navigationOptions se acceden a las propiedades del defaultNavigationOptions definida en el createStackNavigator
+DetalleScreen.navigationOptions = ({ navigation, navigationOptions }) => {
   return {
     title: navigation.getParam('title', 'Cargando...'),
-    headerTintColor: '#ee00ff',
+    headerStyle: {
+      backgroundColor: navigationOptions.headerStyle.backgroundColor
+    }
   }
 }
-/*= {
-  title: 'Pantalla Detalle'
-}*/
 
 // recibe objeto de configuracion que son las pantallas sobre las que se navegara 
 const AppNavigator = createStackNavigator({
@@ -65,7 +64,18 @@ const AppNavigator = createStackNavigator({
   Detalle: {
     screen: DetalleScreen,
   }
-}, { initialRouteName: 'Home' })
+}, { 
+  initialRouteName: 'Home',
+  defaultNavigationOptions: {
+    headerStyle: {
+      backgroundColor: '#ecf'
+    },
+    headerTintColor: '#555',
+    headerTitleStyle: {
+      fontWeight: 'normal',
+    }
+  }
+})
 
 // Es un componente que recibe otro componente que tiene que ser de navegacion
 export default createAppContainer(AppNavigator)
