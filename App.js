@@ -18,9 +18,15 @@ const HomeScreen = ({ navigation }) => {
   )
 }
 
-// a
 HomeScreen.navigationOptions = {
-  title:  'Pantalla Home' 
+  title:  'Pantalla Home',
+  headerStyle: { 
+    backgroundColor: '#ffeecc'
+  },
+  headerTintColor: '#222',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  }
 }
 
 const DetalleScreen = ({ navigation }) => {
@@ -43,7 +49,8 @@ const DetalleScreen = ({ navigation }) => {
 
 DetalleScreen.navigationOptions = ({ navigation }) => {
   return {
-    title: navigation.getParam('title', 'Cargando...')
+    title: navigation.getParam('title', 'Cargando...'),
+    headerTintColor: '#ee00ff',
   }
 }
 /*= {
