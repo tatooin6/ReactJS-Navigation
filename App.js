@@ -2,9 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const Logo = () => <Text>Nombre Empresa</Text>
@@ -16,7 +15,7 @@ const Logo = () => <Text>Nombre Empresa</Text>
       <Button 
 	title="Ir a Detalle"
 	// onPress={ () => navigation.push('Detalle') }
-	onPress={ () => navigation.openDrawer() }
+	onPress={ () => navigation.navigate('Detalle') }
       />
       <StatusBar style="auto" />
     </View>
@@ -83,7 +82,8 @@ DetalleScreen.navigationOptions = ({ navigation }) => {
 }
 
 // recibe objeto de configuracion que son las pantallas sobre las que se navegara 
-const AppNavigator = createDrawerNavigator({
+// Usada generalmente para login
+const AppNavigator = createSwitchNavigator({
   Home: {
     screen: HomeScreen,
   },
