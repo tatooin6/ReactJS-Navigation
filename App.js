@@ -49,12 +49,23 @@ const DetalleScreen = ({ navigation }) => {
     <View>
       <Text> Soy la pantalla de Detalle de {lala} y contador esta en {cont}!</Text>
       <Button 
+	style={ styles.button }
 	title="Volver"
 	onPress={ () => navigation.goBack() }
       />
       <Button 
+	style={ styles.button }
 	title="Cambiar Titulo"
-	onPress={ () => navigation.setParams({ title: 'Usuario 1' }) }
+	onPress={ () => { 
+	    console.log(navigation)
+	    navigation.setParams({ title: 'Usuario ' + navigation.state.params.userId }) 
+	  
+	}}
+      />
+      <Button 
+	style={ styles.button }
+	title="Lazar Modal pantalla entera"	
+	onPress={ () => navigation.navigate("MiModal") }
       />
     </View>  
   )
@@ -98,8 +109,17 @@ const AppNavigator = createStackNavigator({
   }
 })
 
+// Pantalla principal que contiene el conetenedor de pantallas y un modal que se muestra desde otras pantallas
+const RootStack = createStackNavigator({
+  Main: AppNavigator,
+  MiModal: () => <Text>Lalalandia</Text>,
+}, {
+  mode: 'modal',
+  headerMode: 'none',
+})
+
 // Es un componente que recibe otro componente que tiene que ser de navegacion
-export default createAppContainer(AppNavigator)
+export default createAppContainer(RootStack)
 
 const styles = StyleSheet.create({
   container: {
@@ -107,5 +127,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  button: {
+    padding: 70,
+    backgroundColor: 'green',
+    color: 'red',
   },
 });
