@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 const Logo = () => <Text>Nombre Empresa</Text>
 
@@ -46,7 +48,7 @@ const DetalleScreen = ({ navigation }) => {
   // Funcion que busca dentro del objeto que se manda al componente por el .navigate 
   const lala = navigation.getParam('lala', 'valor por defecto');
   return (
-    <View>
+    <View style={ styles.container }>
       <Text> Soy la pantalla de Detalle de {lala} y contador esta en {cont}!</Text>
       <Button 
 	style={ styles.button }
@@ -72,7 +74,7 @@ const DetalleScreen = ({ navigation }) => {
 }
 
 // con navigationOptions se acceden a las propiedades del defaultNavigationOptions definida en el createStackNavigator
-DetalleScreen.navigationOptions = ({ navigation, navigationOptions }) => {
+DetalleScreen.navigationOptions = ({ navigation }) => {
   return {
     title: navigation.getParam('title', 'Cargando...'),
     headerRight: () => 
@@ -82,14 +84,11 @@ DetalleScreen.navigationOptions = ({ navigation, navigationOptions }) => {
 	color="#555"
       />
     ,
-    headerStyle: {
-      backgroundColor: navigationOptions.headerStyle.backgroundColor
-    }
   }
 }
 
 // recibe objeto de configuracion que son las pantallas sobre las que se navegara 
-const AppNavigator = createStackNavigator({
+const AppNavigator = createBottomTabNavigator({
   Home: {
     screen: HomeScreen,
   },
@@ -98,21 +97,49 @@ const AppNavigator = createStackNavigator({
   }
 }, { 
   initialRouteName: 'Home',
-  defaultNavigationOptions: {
-    headerStyle: {
-      backgroundColor: '#ecf'
+  // recibe un objeto o una funcion
+  defaultNavigationOptions: ({ navigation }) => ({
+    tabBarIcon: ({ focused, horizontal, tintColor }) => {
+      const { routeName } = navigation.state
+      let iconName
+      if (routeName === 'Home') {
+	iconName = `ios-information-circle${focused ? '' : '-outline'}`
+      } else {
+	iconName = `earth`
+      }
+
+      return <Ionicons name={ iconName } size={ 20 } tintColor={ tintColor }/>
     },
-    headerTintColor: '#555',
-    headerTitleStyle: {
-      fontWeight: 'normal',
+    tabBarOptions: {
+      activeTintColor: navigation.state.routeName ==  'Home' ? '#e91e63' : 'orange',
+      inactiveTintColor: 'black',
+      labelStyle: {
+	fontSize: 16,
+      },
+      style: {
+	backgroundColor: '#fec',
+      }
     }
-  }
+  })
+  
+  /*{
+    tabBarOptions: {
+      activeTintColor: '#e91e63',
+      inactiveTintColor: 'black',
+      labelStyle: {
+	fontSize: 16,
+      },
+      style: {
+	backgroundColor: '#fec',
+      }
+    }
+  }*/
 })
 
 // Pantalla principal que contiene el conetenedor de pantallas y un modal que se muestra desde otras pantallas
 const RootStack = createStackNavigator({
   Main: AppNavigator,
-  MiModal: () => <Text>Lalalandia</Text>,
+  MiModal: () => <Text style={ styles.container }>Lalalandia</Text>,
 }, {
   mode: 'modal',
   headerMode: 'none',
