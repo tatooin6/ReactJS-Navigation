@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const Logo = () => <Text>Nombre Empresa</Text>
 
@@ -15,7 +16,7 @@ const Logo = () => <Text>Nombre Empresa</Text>
       <Button 
 	title="Ir a Detalle"
 	// onPress={ () => navigation.push('Detalle') }
-	onPress={ () => navigation.navigate('Detalle', { lala: 'lele', userId: 2, title: 'Usuario 1' }) }
+	onPress={ () => navigation.openDrawer() }
       />
       <StatusBar style="auto" />
     </View>
@@ -23,19 +24,13 @@ const Logo = () => <Text>Nombre Empresa</Text>
 }
 
 HomeScreen.navigationOptions = {
-  // title:  'Pantalla Home',
+  drawerIcon: ({ tintColor }) => {
+    return <Ionicons name='ios-information-circle' size={25} color={tintColor}/>
+  },
   headerTitle: () => <Logo />,
-  // boton superior derecho
-  /*headerRight: () => 
-    <Button 
-      onPress={ () => alert('Lalaland') }
-      title="Soy un headButton"
-      color="#222"
-    />
-  ,*/
   headerStyle: {
       backgroundColor: '#cef'
-    },
+  },
 }
 
 const DetalleScreen = ({ navigation }) => {
@@ -88,7 +83,7 @@ DetalleScreen.navigationOptions = ({ navigation }) => {
 }
 
 // recibe objeto de configuracion que son las pantallas sobre las que se navegara 
-const AppNavigator = createBottomTabNavigator({
+const AppNavigator = createDrawerNavigator({
   Home: {
     screen: HomeScreen,
   },
@@ -97,44 +92,7 @@ const AppNavigator = createBottomTabNavigator({
   }
 }, { 
   initialRouteName: 'Home',
-  // recibe un objeto o una funcion
-  defaultNavigationOptions: ({ navigation }) => ({
-    tabBarIcon: ({ focused, horizontal, tintColor }) => {
-      const { routeName } = navigation.state
-      let iconName
-      if (routeName === 'Home') {
-	iconName = `ios-information-circle${focused ? '' : '-outline'}`
-      } else {
-	iconName = `earth`
-      }
-
-      return <Ionicons name={ iconName } size={ 20 } tintColor={ tintColor }/>
-    },
-    tabBarOptions: {
-      activeTintColor: navigation.state.routeName ==  'Home' ? '#e91e63' : 'orange',
-      inactiveTintColor: 'black',
-      labelStyle: {
-	fontSize: 16,
-      },
-      style: {
-	backgroundColor: '#fec',
-      }
-    }
   })
-  
-  /*{
-    tabBarOptions: {
-      activeTintColor: '#e91e63',
-      inactiveTintColor: 'black',
-      labelStyle: {
-	fontSize: 16,
-      },
-      style: {
-	backgroundColor: '#fec',
-      }
-    }
-  }*/
-})
 
 // Pantalla principal que contiene el conetenedor de pantallas y un modal que se muestra desde otras pantallas
 const RootStack = createStackNavigator({
