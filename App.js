@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -22,18 +22,32 @@ const Logo = () => <Text>Nombre Empresa</Text>
 
 HomeScreen.navigationOptions = {
   // title:  'Pantalla Home',
-  headerTitle: <Logo />,
+  headerTitle: () => <Logo />,
+  // boton superior derecho
+  /*headerRight: () => 
+    <Button 
+      onPress={ () => alert('Lalaland') }
+      title="Soy un headButton"
+      color="#222"
+    />
+  ,*/
   headerStyle: {
       backgroundColor: '#cef'
     },
 }
 
 const DetalleScreen = ({ navigation }) => {
+  const [cont, setCont] = useState(0);
+  const incrementar = () => setCont(cont + 1);
+  // cuando se renderice esta aplicacion se va a llamar al metodo incrementar
+  useEffect( () => {
+    navigation.setParams({ incrementar });
+  }, [cont]);
   // Funcion que busca dentro del objeto que se manda al componente por el .navigate 
   const lala = navigation.getParam('lala', 'valor por defecto');
   return (
     <View>
-      <Text> Soy la pantalla de Detalle de {lala}!</Text>
+      <Text> Soy la pantalla de Detalle de {lala} y contador esta en {cont}!</Text>
       <Button 
 	title="Volver"
 	onPress={ () => navigation.goBack() }
@@ -50,6 +64,13 @@ const DetalleScreen = ({ navigation }) => {
 DetalleScreen.navigationOptions = ({ navigation, navigationOptions }) => {
   return {
     title: navigation.getParam('title', 'Cargando...'),
+    headerRight: () => 
+      <Button 
+	onPress={ navigation.getParam('incrementar') }
+	title="+ 1"
+	color="#555"
+      />
+    ,
     headerStyle: {
       backgroundColor: navigationOptions.headerStyle.backgroundColor
     }
